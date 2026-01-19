@@ -1,0 +1,15 @@
+requests
+beautifulsoup4
+lxml
+pymongo
+python-dotenv
+playwright
+docling
+FastAPI
+ pydantic
+sentence-transformers
+chromadb
+FlagEmbedding
+google-generativeai
+
+

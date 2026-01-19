@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ScraperDB Match</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600&display=swap");
+
+      :root {
+        --bg: #f6f1e9;
+        --bg-accent: #fde7d3;
+        --ink: #1e1b16;
+        --muted: #5b5349;
+        --card: #fff8f0;
+        --edge: #e2d6c9;
+        --accent: #0f6b6f;
+        --accent-2: #d86d3c;
+        --shadow: rgba(20, 15, 10, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 10% 20%, #fff7eb 0%, var(--bg) 55%) fixed;
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 80px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        padding: 24px;
+        background: linear-gradient(135deg, #fff9f1 0%, var(--bg-accent) 100%);
+        border: 1px solid var(--edge);
+        border-radius: 20px;
+        box-shadow: 0 18px 40px var(--shadow);
+        animation: fadeUp 0.6s ease-out;
+      }
+
+      .hero h1 {
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 700px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .panel {
+        margin-top: 28px;
+        padding: 24px;
+        background: var(--card);
+        border: 1px solid var(--edge);
+        border-radius: 18px;
+        box-shadow: 0 12px 30px var(--shadow);
+        animation: fadeUp 0.7s ease-out;
+      }
+
+      label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      input[type="text"],
+      input[type="file"],
+      input[type="number"] {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--edge);
+        background: #fff;
+        font-size: 0.95rem;
+      }
+
+      input[type="file"] {
+        padding: 10px;
+        background: #fffaf3;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+        align-items: center;
+      }
+
+      button {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 10px 20px rgba(15, 107, 111, 0.25);
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 26px rgba(15, 107, 111, 0.3);
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .status {
+        margin-top: 14px;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(15, 107, 111, 0.1);
+        color: var(--accent);
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .results {
+        margin-top: 32px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid var(--edge);
+        padding: 18px;
+        box-shadow: 0 10px 24px var(--shadow);
+        animation: fadeUp 0.5s ease-out;
+      }
+
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .score {
+        color: var(--accent-2);
+        font-weight: 700;
+      }
+
+      details {
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 12px;
+        background: #fff7ec;
+        border: 1px dashed var(--edge);
+      }
+
+      summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .snippet {
+        margin-top: 8px;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          padding: 20px;
+        }
+
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <span class="pill">Tender + Profile Match</span>
+        <h1>Upload once. Find the best tenders fast.</h1>
+        <p>
+          Drop a company profile PDF (or multiple PDFs), add an optional query, and we will build embeddings,
+          search tenders, and return ranked results with evidence.
+        </p>
+      </section>
+
+      <section class="panel">
+        <form id="match-form">
+          <div class="grid">
+            <div>
+              <label for="profile_pdf">Profile PDF(s)</label>
+              <input id="profile_pdf" name="profile_pdf" type="file" accept="application/pdf" multiple required />
+            </div>
+            <div>
+              <label for="query">Query (optional)</label>
+              <input id="query" name="query" type="text" placeholder="e.g. security services, data center..." />
+            </div>
+            <div>
+              <label for="top_k">Top K</label>
+              <input id="top_k" name="top_k" type="number" min="1" max="20" value="5" />
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top: 14px;">
+            <div>
+              <label for="location">Location</label>
+              <input id="location" name="location" type="text" placeholder="City or state" />
+            </div>
+            <div>
+              <label for="dept">Department</label>
+              <input id="dept" name="dept" type="text" placeholder="Dept / ministry" />
+            </div>
+            <div>
+              <label for="deadline">Deadline</label>
+              <input id="deadline" name="deadline" type="text" placeholder="YYYY-MM-DD" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="submit-btn" type="submit">Match Tenders</button>
+            <span class="status" id="status">Waiting for input.</span>
+          </div>
+        </form>
+      </section>
+
+      <section class="results" id="results"></section>
+    </div>
+
+    <script>
+      const form = document.getElementById("match-form");
+      const statusEl = document.getElementById("status");
+      const resultsEl = document.getElementById("results");
+      const submitBtn = document.getElementById("submit-btn");
+
+      function setStatus(message) {
+        statusEl.textContent = message;
+      }
+
+      function renderResults(results) {
+        resultsEl.innerHTML = "";
+        if (!results || results.length === 0) {
+          resultsEl.innerHTML = "<div class='card'>No matches yet.</div>";
+          return;
+        }
+        results.forEach((item, idx) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          const title = item.title || item.tender_ref_no || (item.tender_id ? `Tender ${item.tender_id}` : `Tender Result ${idx + 1}`);
+          const pdfUrl = item.pdf_url || "";
+          card.innerHTML = `
+            <h3>${title}</h3>
+            <div class="meta">
+              <span class="score">Score: ${item.rerank_score ?? item.score}</span>
+              <span>Source: ${item.source ?? "N/A"}</span>
+              <span>Ref: ${item.tender_ref_no ?? "-"}</span>
+              <span>Duration: ${item.duration ?? "-"}</span>
+              <span>Chunk: ${item.chunk_index ?? "-"}</span>
+            </div>
+            ${pdfUrl ? `<div class="meta"><a href="${pdfUrl}" target="_blank">Open PDF</a></div>` : ""}
+            ${!pdfUrl && item.local_path ? `<div class="meta">Local: ${item.local_path}</div>` : ""}
+            <details>
+              <summary>Evidence</summary>
+              <div class="snippet"><strong>Tender snippet:</strong> ${item.because?.tender_snippet ?? ""}</div>
+              <div class="snippet"><strong>Profile snippet:</strong> ${item.because?.profile_snippet ?? ""}</div>
+            </details>
+          `;
+          resultsEl.appendChild(card);
+        });
+      }
+
+      async function pollMatchJob(jobId) {
+        setStatus(`Processing job ${jobId}...`);
+        const res = await fetch(`/jobs/${jobId}`);
+        if (!res.ok) {
+          setStatus("Failed to fetch job status.");
+          return;
+        }
+        const data = await res.json();
+        if (data.status === "done" && data.result) {
+          setStatus("Results ready.");
+          renderResults(data.result);
+          submitBtn.disabled = false;
+          return;
+        }
+        if (data.status === "failed") {
+          setStatus(`Job failed: ${data.error || "Unknown error"}`);
+          submitBtn.disabled = false;
+          return;
+        }
+        setStatus(`Working... ${data.progress ?? 0}%`);
+        setTimeout(() => pollMatchJob(jobId), 1500);
+      }
+
+      function buildSearchParams() {
+        const params = new URLSearchParams();
+        const query = document.getElementById("query").value.trim();
+        const topK = document.getElementById("top_k").value.trim();
+        const location = document.getElementById("location").value.trim();
+        const dept = document.getElementById("dept").value.trim();
+        const deadline = document.getElementById("deadline").value.trim();
+
+        if (query) {
+          params.set("query", query);
+        }
+        if (topK) {
+          params.set("top_k", topK);
+        }
+        if (location) {
+          params.set("location", location);
+        }
+        if (dept) {
+          params.set("dept", dept);
+        }
+        if (deadline) {
+          params.set("deadline", deadline);
+        }
+        return params.toString();
+      }
+
+      async function runProfileSearch(profileId, searchParams) {
+        const url = `/profiles/${profileId}/search${searchParams ? `?${searchParams}` : ""}`;
+        const res = await fetch(url, { method: "POST" });
+        const data = await res.json();
+        if (!res.ok) {
+          setStatus(data.detail || "Profile search failed.");
+          return false;
+        }
+        setStatus("Results ready.");
+        renderResults(data.results);
+        return true;
+      }
+
+      async function pollProfileJob(jobId, profileId, searchParams) {
+        setStatus(`Building profile...`);
+        const res = await fetch(`/jobs/${jobId}`);
+        if (!res.ok) {
+          setStatus("Failed to fetch job status.");
+          submitBtn.disabled = false;
+          return;
+        }
+        const data = await res.json();
+        if (data.status === "done") {
+          setStatus("Profile ready. Searching...");
+          await runProfileSearch(profileId, searchParams);
+          submitBtn.disabled = false;
+          return;
+        }
+        if (data.status === "failed") {
+          setStatus(`Job failed: ${data.error || "Unknown error"}`);
+          submitBtn.disabled = false;
+          return;
+        }
+        setStatus(`Building profile... ${data.progress ?? 0}%`);
+        setTimeout(() => pollProfileJob(jobId, profileId, searchParams), 1500);
+      }
+
+      async function runSingleMatch(formData) {
+        const res = await fetch("/search/match", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setStatus(data.detail || "Request failed.");
+          submitBtn.disabled = false;
+          return;
+        }
+
+        if (data.mode === "sync") {
+          setStatus("Results ready.");
+          renderResults(data.results);
+          submitBtn.disabled = false;
+          return;
+        }
+
+        if (data.mode === "async") {
+          pollMatchJob(data.job_id);
+          return;
+        }
+
+        setStatus("Unexpected response.");
+        submitBtn.disabled = false;
+      }
+
+      async function runMultiProfile(files, searchParams) {
+        setStatus("Creating profile...");
+        const profileRes = await fetch("/profiles", { method: "POST" });
+        const profileData = await profileRes.json();
+        if (!profileRes.ok) {
+          setStatus(profileData.detail || "Failed to create profile.");
+          submitBtn.disabled = false;
+          return;
+        }
+
+        const profileId = profileData.profile_id;
+        const uploadData = new FormData();
+        files.forEach((file) => {
+          uploadData.append("pdfs", file);
+        });
+
+        setStatus(`Uploading ${files.length} PDF${files.length > 1 ? "s" : ""}...`);
+        const uploadRes = await fetch(`/profiles/${profileId}/documents`, {
+          method: "POST",
+          body: uploadData,
+        });
+        const uploadResult = await uploadRes.json();
+        if (!uploadRes.ok) {
+          setStatus(uploadResult.detail || "Upload failed.");
+          submitBtn.disabled = false;
+          return;
+        }
+
+        pollProfileJob(uploadResult.job_id, profileId, searchParams);
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        submitBtn.disabled = true;
+        setStatus("Uploading profile...");
+        resultsEl.innerHTML = "";
+
+        const fileInput = document.getElementById("profile_pdf");
+        const files = Array.from(fileInput.files || []);
+        if (files.length === 0) {
+          setStatus("Please select at least one PDF.");
+          submitBtn.disabled = false;
+          return;
+        }
+
+        try {
+          if (files.length === 1) {
+            const formData = new FormData(form);
+            await runSingleMatch(formData);
+            return;
+          }
+
+          const searchParams = buildSearchParams();
+          await runMultiProfile(files, searchParams);
+        } catch (err) {
+          setStatus("Network error.");
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
